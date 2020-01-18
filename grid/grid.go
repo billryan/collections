@@ -1,7 +1,7 @@
 package grid
 
 import (
-	. "github.com/badgerodon/collections"
+	. "github.com/billryan/collections"
 )
 
 type (
@@ -31,7 +31,7 @@ func (this *Grid) Get(p Point) interface{} {
 	if p.X < 0 || p.Y < 0 || p.X >= this.cols || p.Y >= this.rows {
 		return nil
 	}
-	v, _ := this.values[p.X*this.cols+p.Y]
+	v := this.values[p.X*this.cols+p.Y]
 	return v
 }
 
