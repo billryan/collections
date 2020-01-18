@@ -1,5 +1,9 @@
-# Golang Collections ![CI](https://github.com/billryan/collections/workflows/CI/badge.svg) [![Go Report Card](https://goreportcard.com/badge/github.com/billryan/collections)](https://goreportcard.com/report/github.com/billryan/collections) [![Coverage Status](https://coveralls.io/repos/github/billryan/collections/badge.svg?branch=master)](https://coveralls.io/github/billryan/collections?branch=master) [![GoDoc][5]][6]
+# Golang Collections [![CI][1]][1] [![Go Report Card][2]][2] [![codecov.io][3]][4] [![GoDoc][5]][6]
 
+[1]: https://github.com/billryan/collections/workflows/CI/badge.svg
+[2]: https://goreportcard.com/badge/github.com/billryan/collections
+[3]: https://codecov.io/github/billryan/collections/coverage.svg?branch=master "Coverage badge"
+[4]: https://codecov.io/github/billryan/collections?branch=master "Codecov Status"
 [5]: https://godoc.org/github.com/billryan/collections?status.svg "GoDoc badge"
 [6]: https://godoc.org/github.com/billryan/collections "GoDoc"
 
