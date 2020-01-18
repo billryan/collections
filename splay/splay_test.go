@@ -10,10 +10,10 @@ func Test(t *testing.T) {
 		return a.(string) < b.(string)
 	})
 	
-	tree.Insert("d", 4)
-	tree.Insert("b", 2)
-	tree.Insert("a", 1)
-	tree.Insert("c", 3)
+	tree.Add("d")
+	tree.Add("b")
+	tree.Add("a")
+	tree.Add("c")
 	
 	if tree.Len() != 4 {
 		t.Errorf("expecting len 4")

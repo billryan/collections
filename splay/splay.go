@@ -86,6 +86,7 @@ func (this *SplayTree) Init() {
 	this.length = 0
 	this.root = nil
 }
+
 func (this *SplayTree) Add(value Any) {
 	if this.length == 0 {
 		this.root = &node{value, nil, nil, nil}
@@ -122,6 +123,7 @@ func (this *SplayTree) Add(value Any) {
 	}
 	this.splay(n)
 }
+
 func (this *SplayTree) PreOrder(visit VisitFunc) {
 	if this.length == 1 {
 		return
