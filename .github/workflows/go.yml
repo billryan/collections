@@ -23,7 +23,7 @@ jobs:
         run: go test ./...
 
       - name: Coverage
-        run: coverage.sh
+        run: ls -alh && ./coverage.sh
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
