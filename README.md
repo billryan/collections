@@ -10,10 +10,10 @@
 Maps and slices go a long way in Go, but sometimes you need more. This is a collection of collections that may be useful.
 
 ## Queue
-A [queue](https://en.wikipedia.org/wiki/Queue_(data_structure%29) is a first-in first-out data structure.
+A [queue](https://en.wikipedia.org/wiki/Queue_\(data_structure\)) is a first-in first-out data structure.
 
 ## Set
-A [set](https://en.wikipedia.org/wiki/Set_(computer_science%29) is an unordered collection of unique values typically used for testing membership.
+A [set](https://en.wikipedia.org/wiki/Set_\(computer_science\)) is an unordered collection of unique values typically used for testing membership.
 
 ## Skip list
 A [skip list](https://en.wikipedia.org/wiki/Skip_list) is a data structure that stores nodes in a hierarchy of linked lists. It gives performance similar to binary search trees by using a random number of forward links to skip parts of the list.
@@ -23,7 +23,7 @@ A [skip list](https://en.wikipedia.org/wiki/Skip_list) is a data structure that 
 A [splay tree](https://en.wikipedia.org/wiki/Splay_tree) is a type of binary search tree where every access to the tree results in the tree being rearranged so that the current node gets put on top.
 
 ## Stack
-A [stack](https://en.wikipedia.org/wiki/Stack_(abstract_data_type%29) is a last-in last-out data structure.
+A [stack](https://en.wikipedia.org/wiki/Stack_\(abstract_data_type\)) is a last-in last-out data structure.
 
 ## Trie
 A [trie](http://en.wikipedia.org/wiki/Trie) is a type of tree where each node represents one byte of a key.
