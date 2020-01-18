@@ -1,4 +1,4 @@
-# Badgerodon Collections
+# Golang Collections [![Go Report Card](https://goreportcard.com/badge/github.com/billryan/collections)](https://goreportcard.com/report/github.com/billryan/collections)
 
 Maps and slices go a long way in Go, but sometimes you need more. This is a collection of collections that may be useful.
 
