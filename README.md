@@ -1,4 +1,7 @@
-# Golang Collections ![CI](https://github.com/billryan/collections/workflows/CI/badge.svg) [![Go Report Card](https://goreportcard.com/badge/github.com/billryan/collections)](https://goreportcard.com/report/github.com/billryan/collections)
+# Golang Collections ![CI](https://github.com/billryan/collections/workflows/CI/badge.svg) [![Go Report Card](https://goreportcard.com/badge/github.com/billryan/collections)](https://goreportcard.com/report/github.com/billryan/collections) [![Coverage Status](https://coveralls.io/repos/github/billryan/collections/badge.svg?branch=master)](https://coveralls.io/github/billryan/collections?branch=master) [![GoDoc][5]][6]
+
+[5]: https://godoc.org/github.com/billryan/collections?status.svg "GoDoc badge"
+[6]: https://godoc.org/github.com/billryan/collections "GoDoc"
 
 Maps and slices go a long way in Go, but sometimes you need more. This is a collection of collections that may be useful.
 
