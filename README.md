@@ -12,13 +12,36 @@
 
 Maps and slices go a long way in Go, but sometimes you need more. This is a collection of collections that may be useful.
 
+Ported Python and Java collections with love.
+
 ## Queue
+
 A [queue](https://en.wikipedia.org/wiki/Queue_\(data_structure\)) is a first-in first-out data structure.
 
 ## Set
+
 A [set](https://en.wikipedia.org/wiki/Set_\(computer_science\)) is an unordered collection of unique values typically used for testing membership.
 
+- [x] Add
+- [x] AddAll
+- [x] Clear
+- [x] Contains
+- [x] ContainsAll
+- [x] Foreach
+- [x] Len
+- [x] Remove
+- [x] RemoveAll
+- [] isdisjoint
+- [] issubset
+- [] issuperset
+- [] union
+- [] intersection
+- [x] Difference
+- [] symmetric_difference
+
+
 ## Skip list
+
 A [skip list](https://en.wikipedia.org/wiki/Skip_list) is a data structure that stores nodes in a hierarchy of linked lists. It gives performance similar to binary search trees by using a random number of forward links to skip parts of the list.
 
 ## Splay Tree
