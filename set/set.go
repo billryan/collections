@@ -19,32 +19,6 @@ func New(initial ...interface{}) *Set {
 	return s
 }
 
-// Find the difference between two sets
-func (s *Set) Difference(set *Set) *Set {
-	n := make(map[interface{}]nothing)
-
-	for k := range s.hash {
-		if _, exists := set.hash[k]; !exists {
-			n[k] = nothing{}
-		}
-	}
-
-	return &Set{n}
-}
-
-// Call f for each item in the set
-func (s *Set) Do(f func(interface{})) {
-	for k := range s.hash {
-		f(k)
-	}
-}
-
-// Test to see whether or not the element is in the set
-func (s *Set) Has(element interface{}) bool {
-	_, exists := s.hash[element]
-	return exists
-}
-
 // Adds the specified element to this set if it is not already present (optional operation).
 func (s *Set) Add(e interface{}) {
 	s.hash[e] = nothing{}
@@ -66,18 +40,39 @@ func (s *Set) Clear() {
 
 // Returns true if this set contains the specified element.
 func (s *Set) Contains(e interface{}) bool {
-	_, exists := s.hash[e]
-	return exists
+	_, exist := s.hash[e]
+	return exist
 }
 
 // Returns true if this set contains all of the elements of the specified collection.
 func (s *Set) ContainsAll(es ...interface{}) bool {
 	for _, e := range es {
-		if !s.Contains(e) {
+		_, exist := s.hash[e]
+		if !exist {
 			return false
 		}
 	}
 	return true
+}
+
+// Return a new set with elements in the set that are not in the others.
+func (s *Set) Difference(set *Set) *Set {
+	n := make(map[interface{}]nothing)
+
+	for k := range s.hash {
+		if _, exist := set.hash[k]; !exist {
+			n[k] = nothing{}
+		}
+	}
+
+	return &Set{n}
+}
+
+// Call f for each item in the set
+func (s *Set) Foreach(f func(interface{})) {
+	for k := range s.hash {
+		f(k)
+	}
 }
 
 // Returns true if this set contains no elements.
@@ -87,9 +82,24 @@ func (s *Set) IsEmpty() bool {
 
 // Removes the specified element from this set if it is present (optional operation).
 func (s *Set) Remove(e interface{}) bool {
-	exist := s.Contains(e)
+	_, exist := s.hash[e]
 	delete(s.hash, e)
 	return exist
+}
+
+// Removes the specified elements from this set if it is present (optional operation).
+// Return true if all element exist.
+func (s *Set) RemoveAll(es ...interface{}) bool {
+	existAll := true
+	for _, e := range es {
+		_, exist := s.hash[e]
+		if exist {
+			delete(s.hash, e)
+		} else {
+			existAll = false
+		}
+	}
+	return existAll
 }
 
 // Find the intersection of two sets
@@ -105,14 +115,14 @@ func (s *Set) Intersection(set *Set) *Set {
 	return &Set{n}
 }
 
-// Returns the number of elements in this set (its cardinality).
-func (s *Set) Size() int {
+// Return the number of elements in set s (cardinality of s).
+func (s *Set) Len() int {
 	return len(s.hash)
 }
 
 // Returns an slice containing all of the elements in this set.
 func (s *Set) ToSlice() []interface{} {
-	slice := make([]interface{}, s.Size())
+	slice := make([]interface{}, s.Len())
 	for e := range s.hash {
 		slice = append(slice, e)
 	}
@@ -121,12 +131,12 @@ func (s *Set) ToSlice() []interface{} {
 
 // Test whether or not this set is a proper subset of "set"
 func (s *Set) ProperSubsetOf(set *Set) bool {
-	return s.SubsetOf(set) && s.Size() < set.Size()
+	return s.SubsetOf(set) && s.Len() < set.Len()
 }
 
 // Test whether or not this set is a subset of "set"
 func (s *Set) SubsetOf(set *Set) bool {
-	if s.Size() > set.Size() {
+	if s.Len() > set.Len() {
 		return false
 	}
 	for k := range s.hash {
