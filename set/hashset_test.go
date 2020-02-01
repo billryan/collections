@@ -245,3 +245,30 @@ func TestSet_ToSlice(t *testing.T) {
 		t.Error("slice element should be 1, 2, 4")
 	}
 }
+
+func TestHashSet_UnmarshalText(t *testing.T) {
+	text := []byte(`["billryan", "test"]`)
+	s := NewHashSet()
+	err := s.UnmarshalText(text)
+	if err != nil {
+		t.Errorf("error while unmarshal text %s", err)
+	}
+	if !s.ContainsAll("billryan", "test") {
+		t.Error("Set should contain 'billryan' and 'test'")
+	}
+
+	//	type Config struct {
+	//		Users    HashSet
+	//		Password string
+	//	}
+	//
+	//	doc := []byte(`
+	//Users = '["billryan", "test"]'
+	//Password = "mypassword"`)
+	//
+	//	config := Config{}
+	//	err = toml.Unmarshal(doc, &config)
+	//	if err != nil {
+	//		t.Errorf("toml unmarshal error %s", err)
+	//	}
+}

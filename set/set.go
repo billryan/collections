@@ -58,6 +58,9 @@ type Set interface {
 
 	// Test whether the set is a proper superset of other, that is, set >= other and set != other.
 	IsProperSuperset(other Set) bool
+
+	// encoding.TextUnmarshaler interface
+	UnmarshalText(text []byte) error
 }
 
 // Create a new hash set

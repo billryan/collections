@@ -1,5 +1,7 @@
 package set
 
+import "encoding/json"
+
 type (
 	HashSet struct {
 		hash map[interface{}]nothing
@@ -184,4 +186,16 @@ func (s *HashSet) IsSuperset(other Set) bool {
 // Test whether the set is a proper superset of other, that is, set >= other and set != other.
 func (s *HashSet) IsProperSuperset(other Set) bool {
 	return s.Len() > other.Len() && s.IsSuperset(other)
+}
+
+func (s *HashSet) UnmarshalText(text []byte) error {
+	var v []interface{}
+	err := json.Unmarshal(text, &v)
+	if err == nil {
+		s.hash = make(map[interface{}]nothing)
+		for _, k := range v {
+			s.hash[k] = nothing{}
+		}
+	}
+	return err
 }
