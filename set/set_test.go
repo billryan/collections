@@ -64,19 +64,6 @@ func TestSet_ContainsAll(t *testing.T) {
 	}
 }
 
-func TestSet_Difference(t *testing.T) {
-	s1 := New(1, 2, 4)
-	s2 := New(4, 8)
-	s3 := s1.Difference(s2)
-	if s3.Contains(4) || s3.Contains(8) {
-		t.Error("Set should not contain 4 or 8")
-	}
-
-	if !s3.ContainsAll(1, 2) {
-		t.Error("Set should contain 1 and 2")
-	}
-}
-
 func TestSet_Foreach(t *testing.T) {
 	s := New(1, 2, 3)
 	f := func(x interface{}) { fmt.Printf("type of x is %T and value is %v\n", x, x) }
@@ -92,6 +79,17 @@ func TestSet_Len(t *testing.T) {
 	s.AddAll(1, 2, 4)
 	if s.Len() != 3 {
 		t.Error("Length should be 3")
+	}
+}
+
+func TestSet_IsEmpty(t *testing.T) {
+	s := New()
+	if !s.IsEmpty() {
+		t.Error("Set should be empty")
+	}
+	s.Add(1)
+	if s.IsEmpty() {
+		t.Error("Set should not be empty")
 	}
 }
 
@@ -121,51 +119,95 @@ func TestSet_RemoveAll(t *testing.T) {
 	}
 }
 
-func Test(t *testing.T) {
-	s := New()
+func TestSet_Intersection(t *testing.T) {
+	s1 := New(1, 2, 4)
+	s2 := New(1, 2, 8)
+	s3 := New(1, 2, 9, 12)
+	s := s1.Intersection(s2, s3)
+	if !s.ContainsAll(1, 2) {
+		t.Error("Set should contain 1 and 2")
+	}
+	if s.Contains(4) || s.Contains(8) {
+		t.Error("Set should not contain 4 and 8")
+	}
+}
 
-	s.Add(5)
+func TestSet_Union(t *testing.T) {
+	s1 := New(1, 2, 4)
+	s2 := New(1, 2, 8)
+	s3 := New(2, 3)
+	s := s1.Union(s2, s3)
+	if !s.ContainsAll(1, 2, 3, 4, 8) {
+		t.Error("Set should contain 1, 2, 3, 4, 8")
+	}
+}
 
-	if s.Len() != 1 {
-		t.Errorf("Length should be 1")
+func TestSet_Difference(t *testing.T) {
+	s1 := New(1, 2, 4)
+	s2 := New(4, 8)
+	s3 := New(4, 9, 12)
+	s := s1.Difference(s2, s3)
+	if s.Contains(4) || s.Contains(8) {
+		t.Error("Set should not contain 4 or 8")
 	}
 
-	s.Remove(5)
-
-	if s.Len() != 0 {
-		t.Errorf("Length should be 0")
+	if !s.ContainsAll(1, 2) {
+		t.Error("Set should contain 1 and 2")
 	}
+}
 
-	// Difference
-	s1 := New(1, 2, 3, 4, 5, 6)
-	s2 := New(4, 5, 6)
-	s3 := s1.Difference(s2)
-
-	if s3.Len() != 3 {
-		t.Errorf("Length should be 3")
+func TestSet_IsSubset(t *testing.T) {
+	s1 := New(1, 2, 4)
+	s2 := New(2, 4)
+	if !s1.IsSubset(s1) {
+		t.Error("Set s1 should be subset of s1")
 	}
-
-	// Intersection
-	s3 = s1.Intersection(s2)
-	if s3.Len() != 3 {
-		t.Errorf("Length should be 3 after intersection")
+	if !s2.IsSubset(s1) {
+		t.Error("Set s2 should be subset of s1")
 	}
-
-	// Union
-	s4 := New(7, 8, 9)
-	s3 = s2.Union(s4)
-
-	if s3.Len() != 6 {
-		t.Errorf("Length should be 6 after union")
+	if s1.IsSubset(s2) {
+		t.Error("Set s1 should not be subset of s2")
 	}
+}
 
-	// Subset
-	if !s1.SubsetOf(s1) {
-		t.Errorf("set should be a subset of itself")
+func TestSet_IsProperSubset(t *testing.T) {
+	s1 := New(1, 2, 4)
+	s2 := New(2, 4)
+	if s1.IsProperSubset(s1) {
+		t.Error("Set s1 should not be proper subset of s1")
 	}
-	// Proper Subset
-	if s1.ProperSubsetOf(s1) {
-		t.Errorf("set should not be a subset of itself")
+	if !s2.IsProperSubset(s1) {
+		t.Error("Set s2 should be proper subset of s1")
 	}
+	if s1.IsProperSubset(s2) {
+		t.Error("Set s1 should not be proper subset of s2")
+	}
+}
 
+func TestSet_IsSuperset(t *testing.T) {
+	s1 := New(1, 2, 4)
+	s2 := New(2, 4)
+	if !s1.IsSuperset(s1) {
+		t.Error("Set s1 should be superset of s1")
+	}
+	if !s1.IsSuperset(s2) {
+		t.Error("Set s1 should be superset of s2")
+	}
+	if s2.IsSuperset(s1) {
+		t.Error("Set s2 should not be superset of s1")
+	}
+}
+
+func TestSet_IsProperSuperset(t *testing.T) {
+	s1 := New(1, 2, 4)
+	s2 := New(2, 4)
+	if s1.IsProperSuperset(s1) {
+		t.Error("Set s1 should not be proper superset of s1")
+	}
+	if !s1.IsProperSuperset(s2) {
+		t.Error("Set s1 should be proper superset of s2")
+	}
+	if s2.IsProperSuperset(s1) {
+		t.Error("Set s2 should not be proper superset of s1")
+	}
 }
