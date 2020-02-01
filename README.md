@@ -39,7 +39,7 @@ A [set](https://en.wikipedia.org/wiki/Set_\(computer_science\)) is an unordered 
 - [x] Union
 - [x] Intersection
 - [x] Difference
-
+- [] iterator
 
 ## Skip list
 
