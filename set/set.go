@@ -96,7 +96,7 @@ func (s *Set) Len() int {
 
 // Returns an slice containing all of the elements in this set.
 func (s *Set) ToSlice() []interface{} {
-	slice := make([]interface{}, s.Len())
+	slice := make([]interface{}, 0)
 	for e := range s.hash {
 		slice = append(slice, e)
 	}

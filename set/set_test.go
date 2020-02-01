@@ -211,3 +211,25 @@ func TestSet_IsProperSuperset(t *testing.T) {
 		t.Error("Set s2 should not be proper superset of s1")
 	}
 }
+
+func TestSet_ToSlice(t *testing.T) {
+	s := New(1, 2, 4)
+	slice := s.ToSlice()
+	if len(slice) != 3 {
+		t.Error("Slice length should be 3")
+	}
+	i1Cnt, i2Cnt, i4Cnt := 0, 0, 0
+	for _, i := range slice {
+		iInt := i.(int)
+		if iInt == 1 {
+			i1Cnt += 1
+		} else if iInt == 2 {
+			i2Cnt += 1
+		} else if iInt == 4 {
+			i4Cnt += 1
+		}
+	}
+	if i1Cnt != 1 || i2Cnt != 1 || i4Cnt != 1 {
+		t.Error("slice element should be 1, 2, 4")
+	}
+}
