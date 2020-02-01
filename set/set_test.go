@@ -6,19 +6,19 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	s := New()
+	s := NewHashSet()
 	if s.Len() != 0 {
 		t.Error("Length of empty init set should be 0")
 	}
 
-	s = New(1, 4, 8)
+	s = NewHashSet(1, 4, 8)
 	if s.Len() != 3 {
 		t.Error("Length should be 3")
 	}
 }
 
 func TestSet_Add(t *testing.T) {
-	s := New()
+	s := NewHashSet()
 	s.Add("k1")
 
 	if !s.Contains("k1") {
@@ -27,7 +27,7 @@ func TestSet_Add(t *testing.T) {
 }
 
 func TestSet_AddAll(t *testing.T) {
-	s := New()
+	s := NewHashSet()
 	s.AddAll("k1", "k2")
 	if s.Len() != 2 {
 		t.Error("Length should be 2")
@@ -35,7 +35,7 @@ func TestSet_AddAll(t *testing.T) {
 }
 
 func TestSet_Clear(t *testing.T) {
-	s := New(1, 2, 4, 8)
+	s := NewHashSet(1, 2, 4, 8)
 	s.Clear()
 	if s.Len() != 0 {
 		t.Error("Length should be 0 after clear()")
@@ -43,7 +43,7 @@ func TestSet_Clear(t *testing.T) {
 }
 
 func TestSet_Contains(t *testing.T) {
-	s := New(1, 2)
+	s := NewHashSet(1, 2)
 	if s.Contains(0) {
 		t.Error("Set should not contain 0")
 	}
@@ -54,7 +54,7 @@ func TestSet_Contains(t *testing.T) {
 }
 
 func TestSet_ContainsAll(t *testing.T) {
-	s := New(1, 2, 4)
+	s := NewHashSet(1, 2, 4)
 	if !s.ContainsAll(1, 2) {
 		t.Error("Set should contain 1 and 2")
 	}
@@ -65,13 +65,13 @@ func TestSet_ContainsAll(t *testing.T) {
 }
 
 func TestSet_Foreach(t *testing.T) {
-	s := New(1, 2, 3)
+	s := NewHashSet(1, 2, 3)
 	f := func(x interface{}) { fmt.Printf("type of x is %T and value is %v\n", x, x) }
 	s.Foreach(f)
 }
 
 func TestSet_Len(t *testing.T) {
-	s := New()
+	s := NewHashSet()
 	if s.Len() != 0 {
 		t.Error("Length should be 0")
 	}
@@ -83,7 +83,7 @@ func TestSet_Len(t *testing.T) {
 }
 
 func TestSet_IsEmpty(t *testing.T) {
-	s := New()
+	s := NewHashSet()
 	if !s.IsEmpty() {
 		t.Error("Set should be empty")
 	}
@@ -94,7 +94,7 @@ func TestSet_IsEmpty(t *testing.T) {
 }
 
 func TestSet_Remove(t *testing.T) {
-	s := New()
+	s := NewHashSet()
 	s.Remove(2)
 	if s.Len() != 0 {
 		t.Error("Length should be 0")
@@ -108,7 +108,7 @@ func TestSet_Remove(t *testing.T) {
 }
 
 func TestSet_RemoveAll(t *testing.T) {
-	s := New(1, 2, 4)
+	s := NewHashSet(1, 2, 4)
 	exist := s.RemoveAll(1, 2)
 	if !exist {
 		t.Error("Set s should contain 1 and 2 before RemoveAll(1, 2)")
@@ -120,9 +120,9 @@ func TestSet_RemoveAll(t *testing.T) {
 }
 
 func TestSet_Intersection(t *testing.T) {
-	s1 := New(1, 2, 4)
-	s2 := New(1, 2, 8)
-	s3 := New(1, 2, 9, 12)
+	s1 := NewHashSet(1, 2, 4)
+	s2 := NewHashSet(1, 2, 8)
+	s3 := NewHashSet(1, 2, 9, 12)
 	s := s1.Intersection(s2, s3)
 	if !s.ContainsAll(1, 2) {
 		t.Error("Set should contain 1 and 2")
@@ -133,9 +133,9 @@ func TestSet_Intersection(t *testing.T) {
 }
 
 func TestSet_Union(t *testing.T) {
-	s1 := New(1, 2, 4)
-	s2 := New(1, 2, 8)
-	s3 := New(2, 3)
+	s1 := NewHashSet(1, 2, 4)
+	s2 := NewHashSet(1, 2, 8)
+	s3 := NewHashSet(2, 3)
 	s := s1.Union(s2, s3)
 	if !s.ContainsAll(1, 2, 3, 4, 8) {
 		t.Error("Set should contain 1, 2, 3, 4, 8")
@@ -143,9 +143,9 @@ func TestSet_Union(t *testing.T) {
 }
 
 func TestSet_Difference(t *testing.T) {
-	s1 := New(1, 2, 4)
-	s2 := New(4, 8)
-	s3 := New(4, 9, 12)
+	s1 := NewHashSet(1, 2, 4)
+	s2 := NewHashSet(4, 8)
+	s3 := NewHashSet(4, 9, 12)
 	s := s1.Difference(s2, s3)
 	if s.Contains(4) || s.Contains(8) {
 		t.Error("Set should not contain 4 or 8")
@@ -157,8 +157,8 @@ func TestSet_Difference(t *testing.T) {
 }
 
 func TestSet_IsSubset(t *testing.T) {
-	s1 := New(1, 2, 4)
-	s2 := New(2, 4)
+	s1 := NewHashSet(1, 2, 4)
+	s2 := NewHashSet(2, 4)
 	if !s1.IsSubset(s1) {
 		t.Error("Set s1 should be subset of s1")
 	}
@@ -171,8 +171,8 @@ func TestSet_IsSubset(t *testing.T) {
 }
 
 func TestSet_IsProperSubset(t *testing.T) {
-	s1 := New(1, 2, 4)
-	s2 := New(2, 4)
+	s1 := NewHashSet(1, 2, 4)
+	s2 := NewHashSet(2, 4)
 	if s1.IsProperSubset(s1) {
 		t.Error("Set s1 should not be proper subset of s1")
 	}
@@ -185,8 +185,8 @@ func TestSet_IsProperSubset(t *testing.T) {
 }
 
 func TestSet_IsSuperset(t *testing.T) {
-	s1 := New(1, 2, 4)
-	s2 := New(2, 4)
+	s1 := NewHashSet(1, 2, 4)
+	s2 := NewHashSet(2, 4)
 	if !s1.IsSuperset(s1) {
 		t.Error("Set s1 should be superset of s1")
 	}
@@ -199,8 +199,8 @@ func TestSet_IsSuperset(t *testing.T) {
 }
 
 func TestSet_IsProperSuperset(t *testing.T) {
-	s1 := New(1, 2, 4)
-	s2 := New(2, 4)
+	s1 := NewHashSet(1, 2, 4)
+	s2 := NewHashSet(2, 4)
 	if s1.IsProperSuperset(s1) {
 		t.Error("Set s1 should not be proper superset of s1")
 	}
@@ -213,7 +213,7 @@ func TestSet_IsProperSuperset(t *testing.T) {
 }
 
 func TestSet_ToSlice(t *testing.T) {
-	s := New(1, 2, 4)
+	s := NewHashSet(1, 2, 4)
 	slice := s.ToSlice()
 	if len(slice) != 3 {
 		t.Error("Slice length should be 3")
