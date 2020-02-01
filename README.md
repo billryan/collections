@@ -31,13 +31,14 @@ A [set](https://en.wikipedia.org/wiki/Set_\(computer_science\)) is an unordered 
 - [x] Len
 - [x] Remove
 - [x] RemoveAll
-- [] isdisjoint
-- [] issubset
-- [] issuperset
-- [] union
-- [] intersection
+- [] IsDisjoint
+- [x] IsSubset
+- [x] IsProperSubset
+- [x] IsSuperset
+- [x] IsProperSuperset
+- [x] Union
+- [x] Intersection
 - [x] Difference
-- [] symmetric_difference
 
 
 ## Skip list
