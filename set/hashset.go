@@ -92,6 +92,16 @@ func (s *HashSet) ToSlice() []interface{} {
 	return slice
 }
 
+func (s *HashSet) Clone() Set {
+	n := make(map[interface{}]nothing)
+
+	for k := range s.hash {
+		n[k] = nothing{}
+	}
+
+	return &HashSet{n}
+}
+
 // Return a new set with elements common to the set and all others.
 func (s *HashSet) Intersection(others ...Set) Set {
 	n := make(map[interface{}]nothing)

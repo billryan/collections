@@ -35,6 +35,9 @@ type Set interface {
 	// Returns an slice containing all of the elements in this set.
 	ToSlice() []interface{}
 
+	// Returns a deep clone of set
+	Clone() Set
+
 	// Return a new set with elements common to the set and all others.
 	Intersection(others ...Set) Set
 

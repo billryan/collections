@@ -82,6 +82,18 @@ func TestSet_Len(t *testing.T) {
 	}
 }
 
+func TestHashSet_Clone(t *testing.T) {
+	s := NewHashSet(1, 2, 4)
+	s2 := s.Clone()
+	s.Remove(1)
+	if !s2.Contains(1) {
+		t.Error("Set s2 should contain 1")
+	}
+	if !s2.ContainsAll(1, 2, 4) {
+		t.Error("Set s2 should contain 1, 2, 4")
+	}
+}
+
 func TestSet_IsEmpty(t *testing.T) {
 	s := NewHashSet()
 	if !s.IsEmpty() {
