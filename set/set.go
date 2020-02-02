@@ -19,6 +19,9 @@ type Set interface {
 	// Call f for each item in the set
 	Foreach(f func(interface{}))
 
+	// Map f for each item
+	Map(f func(interface{}) interface{}) Set
+
 	// Returns true if this set contains no elements.
 	IsEmpty() bool
 

@@ -70,6 +70,22 @@ func TestSet_Foreach(t *testing.T) {
 	s.Foreach(f)
 }
 
+func TestHashSet_Map(t *testing.T) {
+	oldSet := NewHashSet(1, 2, 3)
+	f := func(x int) int { return x * x }
+	fWrapper := func(x interface{}) interface{} {
+		xInt := x.(int)
+		return f(xInt)
+	}
+	s := oldSet.Map(fWrapper)
+	if s.Len() != oldSet.Len() {
+		t.Errorf("Length should be %d", oldSet.Len())
+	}
+	if !s.ContainsAll(1, 4, 9) {
+		t.Error("Set should be 1, 4, 9")
+	}
+}
+
 func TestSet_Len(t *testing.T) {
 	s := NewHashSet()
 	if s.Len() != 0 {
