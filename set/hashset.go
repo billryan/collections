@@ -53,6 +53,15 @@ func (s *HashSet) Foreach(f func(interface{})) {
 	}
 }
 
+// Call f for each item in the set, set result as new key
+func (s *HashSet) Map(f func(interface{}) interface{}) Set {
+	n := make(map[interface{}]nothing)
+	for k := range s.hash {
+		n[f(k)] = nothing{}
+	}
+	return &HashSet{n}
+}
+
 // Returns true if this set contains no elements.
 func (s *HashSet) IsEmpty() bool {
 	return len(s.hash) == 0
