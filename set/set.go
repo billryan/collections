@@ -1,5 +1,9 @@
 package set
 
+import (
+	"sync"
+)
+
 type Set interface {
 	// Adds the specified element to this set if it is not already present (optional operation).
 	Add(e interface{})
@@ -33,7 +37,7 @@ type Set interface {
 	RemoveAll(es ...interface{}) bool
 
 	// Return the number of elements in set s (cardinality of s).
-	Len() int
+	Len() uint32
 
 	// Returns an slice containing all of the elements in this set.
 	ToSlice() []interface{}
@@ -69,6 +73,20 @@ type Set interface {
 // Create a new hash set
 func NewHashSet(initial ...interface{}) Set {
 	s := &HashSet{make(map[interface{}]nothing)}
+
+	for _, v := range initial {
+		s.Add(v)
+	}
+
+	return s
+}
+
+// Create a new concurrent set
+func NewConcurrentSet(initial ...interface{}) Set {
+	s := &ConcurrentSet{
+		hash: sync.Map{},
+		size: 0,
+	}
 
 	for _, v := range initial {
 		s.Add(v)

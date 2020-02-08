@@ -34,7 +34,7 @@ func (s *ConcurrentSet) Clear() {
 		s.hash.Delete(k)
 		return true
 	})
-	s.size = 0
+	atomic.StoreUint32(&s.size, 0)
 }
 
 func (s *ConcurrentSet) Contains(e interface{}) bool {
@@ -104,8 +104,8 @@ func (s *ConcurrentSet) RemoveAll(es ...interface{}) bool {
 }
 
 // Return the number of elements in set s (cardinality of s).
-func (s *ConcurrentSet) Len() int {
-	return int(s.size)
+func (s *ConcurrentSet) Len() uint32 {
+	return atomic.LoadUint32(&s.size)
 }
 
 // Returns an slice containing all of the elements in this set.
