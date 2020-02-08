@@ -90,8 +90,8 @@ func (s *HashSet) RemoveAll(es ...interface{}) bool {
 }
 
 // Return the number of elements in set s (cardinality of s).
-func (s *HashSet) Len() int {
-	return len(s.hash)
+func (s *HashSet) Len() uint32 {
+	return uint32(len(s.hash))
 }
 
 // Returns an slice containing all of the elements in this set.

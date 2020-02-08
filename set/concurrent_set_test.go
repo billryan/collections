@@ -2,23 +2,24 @@ package set
 
 import (
 	"fmt"
+	"sync"
 	"testing"
 )
 
-func TestNew(t *testing.T) {
-	s := NewHashSet()
+func TestNewConcurrentSet(t *testing.T) {
+	s := NewConcurrentSet()
 	if s.Len() != 0 {
 		t.Error("Length of empty init set should be 0")
 	}
 
-	s = NewHashSet(1, 4, 8)
+	s = NewConcurrentSet(1, 4, 8)
 	if s.Len() != 3 {
 		t.Error("Length should be 3")
 	}
 }
 
-func TestHashSet_Add(t *testing.T) {
-	s := NewHashSet()
+func TestConcurrentSet_Add(t *testing.T) {
+	s := NewConcurrentSet()
 	s.Add("k1")
 
 	if !s.Contains("k1") {
@@ -26,24 +27,24 @@ func TestHashSet_Add(t *testing.T) {
 	}
 }
 
-func TestHashSet_AddAll(t *testing.T) {
-	s := NewHashSet()
+func TestConcurrentSet_AddAll(t *testing.T) {
+	s := NewConcurrentSet()
 	s.AddAll("k1", "k2")
 	if s.Len() != 2 {
 		t.Error("Length should be 2")
 	}
 }
 
-func TestHashSet_Clear(t *testing.T) {
-	s := NewHashSet(1, 2, 4, 8)
+func TestConcurrentSet_Clear(t *testing.T) {
+	s := NewConcurrentSet(1, 2, 4, 8)
 	s.Clear()
 	if s.Len() != 0 {
 		t.Error("Length should be 0 after clear()")
 	}
 }
 
-func TestHashSet_Contains(t *testing.T) {
-	s := NewHashSet(1, 2)
+func TestConcurrentSet_Contains(t *testing.T) {
+	s := NewConcurrentSet(1, 2)
 	if s.Contains(0) {
 		t.Error("Set should not contain 0")
 	}
@@ -53,8 +54,8 @@ func TestHashSet_Contains(t *testing.T) {
 	}
 }
 
-func TestHashSet_ContainsAll(t *testing.T) {
-	s := NewHashSet(1, 2, 4)
+func TestConcurrentSet_ContainsAll(t *testing.T) {
+	s := NewConcurrentSet(1, 2, 4)
 	if !s.ContainsAll(1, 2) {
 		t.Error("Set should contain 1 and 2")
 	}
@@ -64,14 +65,14 @@ func TestHashSet_ContainsAll(t *testing.T) {
 	}
 }
 
-func TestHashSet_Foreach(t *testing.T) {
-	s := NewHashSet(1, 2, 3)
+func TestConcurrentSet_Foreach(t *testing.T) {
+	s := NewConcurrentSet(1, 2, 3)
 	f := func(x interface{}) { fmt.Printf("type of x is %T and value is %v\n", x, x) }
 	s.Foreach(f)
 }
 
-func TestHashSet_Map(t *testing.T) {
-	oldSet := NewHashSet(1, 2, 3)
+func TestConcurrentSet_Map(t *testing.T) {
+	oldSet := NewConcurrentSet(1, 2, 3)
 	f := func(x int) int { return x * x }
 	fWrapper := func(x interface{}) interface{} {
 		xInt := x.(int)
@@ -86,8 +87,8 @@ func TestHashSet_Map(t *testing.T) {
 	}
 }
 
-func TestHashSet_Len(t *testing.T) {
-	s := NewHashSet()
+func TestConcurrentSet_Len(t *testing.T) {
+	s := NewConcurrentSet()
 	if s.Len() != 0 {
 		t.Error("Length should be 0")
 	}
@@ -96,10 +97,52 @@ func TestHashSet_Len(t *testing.T) {
 	if s.Len() != 2 {
 		t.Error("Length should be 2")
 	}
+
+	wg := &sync.WaitGroup{}
+	for i := 0; i < 1000; i++ {
+		wg.Add(1)
+		go func(i int) {
+			defer wg.Done()
+			s.Add(i)
+		}(i)
+	}
+	wg.Wait()
+
+	sLen := s.Len()
+	if sLen != 1000 {
+		t.Errorf("Length %d should be 1000", sLen)
+	}
+
+	for i := 0; i < 100; i++ {
+		wg.Add(1)
+		go func(i int) {
+			defer wg.Done()
+			s.Remove(i)
+		}(i)
+	}
+	wg.Wait()
+	sLen = s.Len()
+	if sLen != 900 {
+		t.Errorf("Length %d should be 900", sLen)
+	}
+
+	// remove again
+	for i := 0; i < 100; i++ {
+		wg.Add(1)
+		go func(i int) {
+			defer wg.Done()
+			s.Remove(i)
+		}(i)
+	}
+	wg.Wait()
+	sLen = s.Len()
+	if sLen != 900 {
+		t.Errorf("Length %d should be 900", sLen)
+	}
 }
 
-func TestHashSet_Clone(t *testing.T) {
-	s := NewHashSet(1, 2, 4)
+func TestConcurrentSet_Clone(t *testing.T) {
+	s := NewConcurrentSet(1, 2, 4)
 	s2 := s.Clone()
 	s.Remove(1)
 	if !s2.Contains(1) {
@@ -110,8 +153,8 @@ func TestHashSet_Clone(t *testing.T) {
 	}
 }
 
-func TestHashSet_IsEmpty(t *testing.T) {
-	s := NewHashSet()
+func TestConcurrentSet_IsEmpty(t *testing.T) {
+	s := NewConcurrentSet()
 	if !s.IsEmpty() {
 		t.Error("Set should be empty")
 	}
@@ -121,8 +164,8 @@ func TestHashSet_IsEmpty(t *testing.T) {
 	}
 }
 
-func TestHashSet_Remove(t *testing.T) {
-	s := NewHashSet()
+func TestConcurrentSet_Remove(t *testing.T) {
+	s := NewConcurrentSet()
 	s.Remove(2)
 	if s.Len() != 0 {
 		t.Error("Length should be 0")
@@ -135,8 +178,8 @@ func TestHashSet_Remove(t *testing.T) {
 	}
 }
 
-func TestHashSet_RemoveAll(t *testing.T) {
-	s := NewHashSet(1, 2, 4)
+func TestConcurrentSet_RemoveAll(t *testing.T) {
+	s := NewConcurrentSet(1, 2, 4)
 	exist := s.RemoveAll(1, 2)
 	if !exist {
 		t.Error("Set s should contain 1 and 2 before RemoveAll(1, 2)")
@@ -147,10 +190,10 @@ func TestHashSet_RemoveAll(t *testing.T) {
 	}
 }
 
-func TestHashSet_Intersection(t *testing.T) {
-	s1 := NewHashSet(1, 2, 4)
-	s2 := NewHashSet(1, 2, 8)
-	s3 := NewHashSet(1, 2, 9, 12)
+func TestConcurrentSet_Intersection(t *testing.T) {
+	s1 := NewConcurrentSet(1, 2, 4)
+	s2 := NewConcurrentSet(1, 2, 8)
+	s3 := NewConcurrentSet(1, 2, 9, 12)
 	s := s1.Intersection(s2, s3)
 	if !s.ContainsAll(1, 2) {
 		t.Error("Set should contain 1 and 2")
@@ -160,20 +203,20 @@ func TestHashSet_Intersection(t *testing.T) {
 	}
 }
 
-func TestHashSet_Union(t *testing.T) {
-	s1 := NewHashSet(1, 2, 4)
-	s2 := NewHashSet(1, 2, 8)
-	s3 := NewHashSet(2, 3)
+func TestConcurrentSet_Union(t *testing.T) {
+	s1 := NewConcurrentSet(1, 2, 4)
+	s2 := NewConcurrentSet(1, 2, 8)
+	s3 := NewConcurrentSet(2, 3)
 	s := s1.Union(s2, s3)
 	if !s.ContainsAll(1, 2, 3, 4, 8) {
 		t.Error("Set should contain 1, 2, 3, 4, 8")
 	}
 }
 
-func TestHashSet_Difference(t *testing.T) {
-	s1 := NewHashSet(1, 2, 4)
-	s2 := NewHashSet(4, 8)
-	s3 := NewHashSet(4, 9, 12)
+func TestConcurrentSet_Difference(t *testing.T) {
+	s1 := NewConcurrentSet(1, 2, 4)
+	s2 := NewConcurrentSet(4, 8)
+	s3 := NewConcurrentSet(4, 9, 12)
 	s := s1.Difference(s2, s3)
 	if s.Contains(4) || s.Contains(8) {
 		t.Error("Set should not contain 4 or 8")
@@ -184,9 +227,9 @@ func TestHashSet_Difference(t *testing.T) {
 	}
 }
 
-func TestHashSet_IsSubset(t *testing.T) {
-	s1 := NewHashSet(1, 2, 4)
-	s2 := NewHashSet(2, 4)
+func TestConcurrentSet_IsSubset(t *testing.T) {
+	s1 := NewConcurrentSet(1, 2, 4)
+	s2 := NewConcurrentSet(2, 4)
 	if !s1.IsSubset(s1) {
 		t.Error("Set s1 should be subset of s1")
 	}
@@ -198,9 +241,9 @@ func TestHashSet_IsSubset(t *testing.T) {
 	}
 }
 
-func TestHashSet_IsProperSubset(t *testing.T) {
-	s1 := NewHashSet(1, 2, 4)
-	s2 := NewHashSet(2, 4)
+func TestConcurrentSet_IsProperSubset(t *testing.T) {
+	s1 := NewConcurrentSet(1, 2, 4)
+	s2 := NewConcurrentSet(2, 4)
 	if s1.IsProperSubset(s1) {
 		t.Error("Set s1 should not be proper subset of s1")
 	}
@@ -212,9 +255,9 @@ func TestHashSet_IsProperSubset(t *testing.T) {
 	}
 }
 
-func TestHashSet_IsSuperset(t *testing.T) {
-	s1 := NewHashSet(1, 2, 4)
-	s2 := NewHashSet(2, 4)
+func TestConcurrentSet_IsSuperset(t *testing.T) {
+	s1 := NewConcurrentSet(1, 2, 4)
+	s2 := NewConcurrentSet(2, 4)
 	if !s1.IsSuperset(s1) {
 		t.Error("Set s1 should be superset of s1")
 	}
@@ -226,9 +269,9 @@ func TestHashSet_IsSuperset(t *testing.T) {
 	}
 }
 
-func TestHashSet_IsProperSuperset(t *testing.T) {
-	s1 := NewHashSet(1, 2, 4)
-	s2 := NewHashSet(2, 4)
+func TestConcurrentSet_IsProperSuperset(t *testing.T) {
+	s1 := NewConcurrentSet(1, 2, 4)
+	s2 := NewConcurrentSet(2, 4)
 	if s1.IsProperSuperset(s1) {
 		t.Error("Set s1 should not be proper superset of s1")
 	}
@@ -240,8 +283,8 @@ func TestHashSet_IsProperSuperset(t *testing.T) {
 	}
 }
 
-func TestHashSet_ToSlice(t *testing.T) {
-	s := NewHashSet(1, 2, 4)
+func TestConcurrentSet_ToSlice(t *testing.T) {
+	s := NewConcurrentSet(1, 2, 4)
 	slice := s.ToSlice()
 	if len(slice) != 3 {
 		t.Error("Slice length should be 3")
@@ -262,9 +305,9 @@ func TestHashSet_ToSlice(t *testing.T) {
 	}
 }
 
-func TestHashSet_UnmarshalText(t *testing.T) {
+func TestConcurrentSet_UnmarshalText(t *testing.T) {
 	text := []byte(`["billryan", "test"]`)
-	s := NewHashSet()
+	s := NewConcurrentSet()
 	err := s.UnmarshalText(text)
 	if err != nil {
 		t.Errorf("error while unmarshal text %s", err)
