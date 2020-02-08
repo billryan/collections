@@ -331,3 +331,12 @@ func TestConcurrentSet_UnmarshalText(t *testing.T) {
 	//		t.Errorf("toml unmarshal error %s", err)
 	//	}
 }
+
+func TestConcurrentSet_ToSet(t *testing.T) {
+	s := NewConcurrentSet(1, 2, 4)
+	cs := s.(*ConcurrentSet)
+	hs := cs.ToSet()
+	if !hs.ContainsAll(1, 2, 4) {
+		t.Error("set should contain 1, 2, 4")
+	}
+}
