@@ -22,24 +22,7 @@ A [queue](https://en.wikipedia.org/wiki/Queue_\(data_structure\)) is a first-in 
 
 A [set](https://en.wikipedia.org/wiki/Set_\(computer_science\)) is an unordered collection of unique values typically used for testing membership.
 
-- [x] Add
-- [x] AddAll
-- [x] Clear
-- [x] Contains
-- [x] ContainsAll
-- [x] Foreach
-- [x] Len
-- [x] Remove
-- [x] RemoveAll
-- [] IsDisjoint
-- [x] IsSubset
-- [x] IsProperSubset
-- [x] IsSuperset
-- [x] IsProperSuperset
-- [x] Union
-- [x] Intersection
-- [x] Difference
-- [] iterator
+Interface `Set` is similar to Java Set and Python collections, which includes `HashSet` and `ConcurrentSet` implementation. Concurrent Set is supported by native `sync.Map` and `atomic` to keep size.
 
 ## Skip list
 
